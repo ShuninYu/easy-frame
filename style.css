@@ -34,7 +34,7 @@ body {
 }
 footer {
   width: 100%;
-  padding: 30px;
+  padding: 10px;
   color: white;
   background-color: #092c49;
   font-size: 14px;
@@ -130,9 +130,63 @@ h1 {
   font-family: 'Lexend Deca', sans-serif;
   margin-bottom: 10px;
 }
+.normalbox .ps {
+  font-size: 14px;
+  line-height: 1rem;
+  font-family: 'Lexend Deca', sans-serif;
+  margin-top: 10px;
+}
 .normalbox code {
   background-color: #c9e2ff;
   font-family: 'consolas', sans-serif;
+}
+.normalbox ol {
+  margin-left: 30px;
+}
+.normalbox ul {
+  margin-left: 30px;
+}
+.example-animate {
+  width: 16px;
+  height: 16px;
+  background-image: url("/example.png");
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: exampleanime 1.9s infinite;
+}
+@keyframes exampleanime {
+  0% {
+    background-position: 0px 0;
+    animation-timing-function: steps(1, end);
+  }
+  5.263158% {
+    background-position: -16px 0;
+    animation-timing-function: steps(1, end);
+  }
+  10.526316% {
+    background-position: -32px 0;
+    animation-timing-function: steps(1, end);
+  }
+  15.789474% {
+    background-position: -48px 0;
+    animation-timing-function: steps(1, end);
+  }
+  68.421053% {
+    background-position: -64px 0;
+    animation-timing-function: steps(1, end);
+  }
+  78.947368% {
+    background-position: -80px 0;
+    animation-timing-function: steps(1, end);
+  }
+  89.473684% {
+    background-position: -96px 0;
+    animation-timing-function: steps(1, end);
+  }
+  100% {
+    background-position: -96px 0;
+  }
 }
 .blanket-cover {
   position: relative;
