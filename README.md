@@ -41,13 +41,13 @@ Just add a class and configuration — and it works.
 ### CDN (Recommended)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/easyframe/dist/easyframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@v1.0.0/dist/easy-frame.umd.min.js"></script>
 ```
 
 or
 
 ```html
-<script src="https://unpkg.com/easyframe/dist/easyframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/easy-frame/dist/easy-frame.umd.min.js"></script>
 ```
 
 ---
