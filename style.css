@@ -362,6 +362,9 @@ select option {
 .code-container {
   position: relative;
 }
+.code-container textarea {
+  white-space: pre-wrap;
+}
 .code-container textarea:focus {
   outline: none;
 }
@@ -383,11 +386,20 @@ select option {
 .code-box.keyframe {
   height: 300px;
 }
-.copy-btn {
+.code-actions {
   position: absolute;
   top: 0.5rem;
   right: 1.5rem;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.code-actions label {
+  text-transform: none;
+}
+.copy-btn {
   padding: 6px 16px;
+  font-size: 14px;
   background: #4CAF50;
   color: white;
   border: none;
@@ -398,7 +410,27 @@ select option {
 }
 .copy-btn:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  cursor: default;
+}
+.minify-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #4CAF50;
+  color: white;
+  padding: 6px 16px;
+  font-size: 14px;
+  line-height: normal;
+  cursor: pointer;
+  user-select: none;
+}
+.minify-checkbox:hover {
+  background: #45a049;
+}
+.minify-checkbox input {
+  margin: 0;
+  width: 14px;
+  height: 14px;
 }
 .preview-section {
   position: absolute;

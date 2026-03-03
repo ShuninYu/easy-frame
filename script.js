@@ -106,6 +106,25 @@
         return { classRule, keyframesRule };
     }
 
+    // ---------- CSS 压缩函数 ----------
+    function minifyCSS(css) {
+        // 去除多余空白：将连续的空白字符（空格、换行、制表符）替换为一个空格
+        let min = css.replace(/\s+/g, ' ');
+        // 去除 { 前后的空格
+        min = min.replace(/\s*{\s*/g, '{');
+        // 去除 } 前后的空格
+        min = min.replace(/\s*}\s*/g, '}');
+        // 去除 ; 后的空格
+        min = min.replace(/;\s*/g, ';');
+        // 去除 : 后的空格（但保留值内的空格，例如 animation 值中的空格）
+        min = min.replace(/:\s+/g, ':');
+        // 去除 , 后的空格（如果有）
+        min = min.replace(/,\s*/g, ',');
+        // 去除开头和结尾的空格
+        min = min.trim();
+        return min;
+    }
+
     // ---------- 页面交互 ----------
     const animNameInput = document.getElementById('animName');
     const classNameInput = document.getElementById('className');
@@ -154,6 +173,14 @@
     // 复制按钮
     const copyClassBtn = document.getElementById('copyClassBtn');
     const copyKeyframesBtn = document.getElementById('copyKeyframesBtn');
+
+    // Minified 复选框
+    const minifyClassCheckbox = document.getElementById('minifyClass');
+    const minifyKeyframesCheckbox = document.getElementById('minifyKeyframes');
+
+    // 存储原始 CSS（未压缩）
+    let originalClassCSS = '';
+    let originalKeyframesCSS = '';
 
     // 状态变量
     let localImageBlobUrl = null;
@@ -337,6 +364,23 @@
 
     imageUrlInput.addEventListener('input', updatePreviewAnimation);
 
+    // ---------- 更新输出框内容（根据 Minified 状态）----------
+    function updateClassOutput() {
+        if (minifyClassCheckbox.checked) {
+            classOutput.value = minifyCSS(originalClassCSS);
+        } else {
+            classOutput.value = originalClassCSS;
+        }
+    }
+
+    function updateKeyframesOutput() {
+        if (minifyKeyframesCheckbox.checked) {
+            keyframesOutput.value = minifyCSS(originalKeyframesCSS);
+        } else {
+            keyframesOutput.value = originalKeyframesCSS;
+        }
+    }
+
     // ---------- 生成按钮 ----------
     generateBtn.addEventListener('click', () => {
         clearAllErrors();
@@ -426,15 +470,20 @@
                 pixelated: pixelated
             });
 
-            classOutput.value = classRule;
-            keyframesOutput.value = keyframesRule;
+            // 存储原始 CSS
+            originalClassCSS = classRule;
+            originalKeyframesCSS = keyframesRule;
+
+            // 根据复选框状态更新显示
+            updateClassOutput();
+            updateKeyframesOutput();
 
             updatePreviewAnimation();
 
             removeDynamicStyle();
             const styleEl = document.createElement('style');
             styleEl.id = dynamicStyleId;
-            styleEl.textContent = keyframesRule;
+            styleEl.textContent = keyframesRule; // 注意：预览需要原始关键帧，不能压缩
             document.head.appendChild(styleEl);
 
             showCode();
@@ -443,6 +492,10 @@
             showError('animName', error.message);
         }
     });
+
+    // ---------- Minified 复选框事件 ----------
+    minifyClassCheckbox.addEventListener('change', updateClassOutput);
+    minifyKeyframesCheckbox.addEventListener('change', updateKeyframesOutput);
 
     // ---------- 开关代码显示 ----------
     function showCode() {

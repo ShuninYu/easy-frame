@@ -112,7 +112,6 @@
         </div>
         <!-- 预览区域 -->
         <div class="preview-section" id="previewSection" style="display: none;">
-            <!-- <div class="output-label">👁️ Preview</div> -->
             <div class="preview-box">
                 <div class="preview-area" id="previewArea">
                     <div id="previewAnim" class="preview-animation"></div>
@@ -127,13 +126,23 @@
                 <div class="output-label">Class rule (<span id="classPreview">.sprite-animate</span>)</div>
                 <div class="code-container">
                     <textarea readonly class="code-box class" id="classOutput" placeholder="/* Click generate to see class CSS */"></textarea>
-                    <button class="copy-btn" id="copyClassBtn">Copy code</button>
+                    <div class="code-actions">
+                        <label class="minify-checkbox">
+                            <input type="checkbox" id="minifyClass"> Minified
+                        </label>
+                        <button class="copy-btn" id="copyClassBtn">Copy code</button>
+                    </div>
                 </div>
     
                 <div class="output-label">@keyframes rule (<span id="keyframePreview">spriteAnimate</span>)</div>
                 <div class="code-container">
                     <textarea readonly class="code-box keyframe" id="keyframesOutput" placeholder="/* Click generate to see keyframes */"></textarea>
-                    <button class="copy-btn" id="copyKeyframesBtn">Copy code</button>
+                    <div class="code-actions">
+                        <label class="minify-checkbox">
+                            <input type="checkbox" id="minifyKeyframes"> Minified
+                        </label>
+                        <button class="copy-btn" id="copyKeyframesBtn">Copy code</button>
+                    </div>
                 </div>
             </div>
         </div>
