@@ -6,6 +6,11 @@
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
     <title>EasyFrame - Sprite Sheet Animation CSS Generator</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/monokai.min.css">
+    <script src="/highlight.min.js"></script>
+    <script src="/hljs-copycode.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@v1.0.0/dist/easy-frame.umd.min.js"></script>
+    <script>hljs.highlightAll();</script>
 </head>
 <body>
     <div class="topbar">
@@ -16,6 +21,7 @@
         </div>
         <div class="navbar">
             <a href="">home</a>
+            <a href="/tool">tool</a>
             <a href="/tutorial">tutorial</a>
             <a href="/about">about</a>
             <a href="/privacy">privacy</a>
@@ -23,127 +29,96 @@
         </div>
     </div>
 
-    <div class="blanket-cover">
-        <div class="container">
-            <div class="form-grid">
-                <!-- 动画名 -->
-                <div class="field">
-                    <label>Animation name</label>
-                    <input type="text" id="animName" value="sprite-animation" placeholder="e.g. sprite-animation">
-                    <div class="hint">CSS @keyframes name (must be valid identifier)</div>
-                    <div class="field-error" id="error-animName"></div>
-                </div>
-                <!-- 类名 -->
-                <div class="field">
-                    <label>Class name</label>
-                    <input type="text" id="className" value="sprite-animated-element" placeholder="e.g. sprite-animated-element">
-                    <div class="hint">Class for cursor element (without dot)</div>
-                    <div class="field-error" id="error-className"></div>
-                </div>
-                <!-- 尺寸 -->
-                <div class="field">
-                    <label>Width (px)</label>
-                    <input type="number" id="width" value="32" min="1">
-                    <div class="field-error" id="error-width"></div>
-                </div>
-                <div class="field">
-                    <label>Height (px)</label>
-                    <input type="number" id="height" value="32" min="1">
-                    <div class="field-error" id="error-height"></div>
-                </div>
-                <!-- 图片区域：URL + 上传切换 -->
-                <div class="field full-width" id="imageField">
-                    <label>Background image</label>
-                    <div id="imageUrlGroup" class="image-field-group">
-                        <input type="url" id="imageUrl" placeholder="https://example.com/sprite.png or /images/sprite.png">
-                        <button type="button" id="uploadToggleBtn" class="small-btn">Upload local</button>
+    <!-- 完全隔离的首页内容 -->
+    <div class="home-page">
+        <!-- Hero Section -->
+        <div class="home-hero">
+            <div class="home-hero-content">
+                <div class="ef-sprite" data-ef="size:378x365;frames:20;duration:1;" data-ef-src="https://ik.imagekit.io/shunin/website/shuninyudance.png"></div>
+                <div class="home-hero-text">
+                    <div class="home-logo2"></div>
+                    <h1 class="home-hero-title">EasyFrame.JS</h1>
+                    <p class="home-hero-tagline">CSS Sprite Sheet Animation Generator</p>
+                    <p class="home-hero-description">Zero-coding, lightweight library that automatically injects keyframe animations from simple HTML data attributes.</p>
+                    <div class="home-hero-buttons">
+                        <a href="/tutorial" class="home-btn home-btn-primary">Get Started</a>
+                        <a href="/tool" class="home-btn home-btn-secondary">Try Online Tool</a>
                     </div>
-                    <div id="uploadGroup" style="display: none;">
-                        <div id="dropZone" class="drop-zone">Drag & drop image here or click to select</div>
-                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                        <div style="margin-top: 8px;">
-                            <button type="button" id="backToUrlBtn" class="small-btn">Back to URL input</button>
-                        </div>
-                        <div id="uploadPreviewContainer" class="upload-preview" style="display: none;">
-                            <img id="uploadPreviewImg" alt="Preview">
-                        </div>
-                        <div class="field-error" id="error-upload"></div>
-                    </div>
-                    <div class="hint">Provide a URL or upload a local image for preview (URL will be used in generated CSS).</div>
-                    <div class="preview-note" id="previewNote">
-                        Preview uses infinite loop (with alternate if pingpong selected).<br>
-                        <span id="previewError" class="preview-error"></span>
-                    </div>
-                </div>
-                <!-- Pixelated 复选框 -->
-                <div class="field full-width">
-                    <div class="checkbox-field">
-                        <input type="checkbox" id="pixelatedCheckbox">
-                        <label>Pixelated (image-rendering: pixelated)</label>
-                    </div>
-                    <div class="hint">Apply crisp pixel edges for pixel art sprites</div>
-                </div>
-                <!-- frames 输入 -->
-                <div class="field">
-                    <label>Frames</label>
-                    <input type="text" id="frames" value="" placeholder='e.g. 10 or [10,1,4]'>
-                    <div class="hint">Number or JSON array (positive integers)</div>
-                    <div class="field-error" id="error-frames"></div>
-                </div>
-                <!-- duration 输入 -->
-                <div class="field">
-                    <label>Duration (seconds)</label>
-                    <input type="text" id="duration" value="" placeholder='e.g. 2 or [1,0.5,1]'>
-                    <div class="hint">Number or JSON array (same length as frames)</div>
-                    <div class="field-error" id="error-duration"></div>
-                </div>
-                <!-- 循环模式 -->
-                <div class="field">
-                    <label>Cycle mode</label>
-                    <select id="cycleMode">
-                        <option value="none">None (play once)</option>
-                        <option value="loop" selected>Loop (infinite)</option>
-                        <option value="pingpong">Ping-pong (infinite alternate)</option>
-                    </select>
-                </div>
-            </div>
-    
-            <button class="btn" id="generateBtn">Generate CSS</button>
-        </div>
-        <!-- 预览区域 -->
-        <div class="preview-section" id="previewSection" style="display: none;">
-            <div class="preview-box">
-                <div class="preview-area" id="previewArea">
-                    <div id="previewAnim" class="preview-animation"></div>
                 </div>
             </div>
         </div>
-    
-        <div class="output-box hide" id="codeBox">
-            <!-- 输出区域：使用 textarea -->
-            <div class="output-switch" id="switchCode"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="-10 -10 42 42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-braces-corner-icon lucide-file-braces-corner"><path d="M14 22h4a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v6"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M5 14a1 1 0 0 0-1 1v2a1 1 0 0 1-1 1 1 1 0 0 1 1 1v2a1 1 0 0 0 1 1"/><path d="M9 22a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-2a1 1 0 0 0-1-1"/></svg></div>
-            <div class="output-section">
-                <div class="output-label">Class rule (<span id="classPreview">.sprite-animate</span>)</div>
-                <div class="code-container">
-                    <textarea readonly class="code-box class" id="classOutput" placeholder="/* Click generate to see class CSS */"></textarea>
-                    <div class="code-actions">
-                        <label class="minify-checkbox">
-                            <input type="checkbox" id="minifyClass"> Minified
-                        </label>
-                        <button class="copy-btn" id="copyClassBtn">Copy code</button>
+
+        <!-- Introduction -->
+        <div class="home-section home-intro">
+            <div class="home-container home-container-narrow">
+                <h2 class="home-section-title">What is EasyFrame?</h2>
+                <p class="home-section-text">EasyFrame is a JavaScript library that eliminates the tedious work of writing CSS <code>@keyframes</code> for sprite sheet animations. Just add a few <code>data-</code> attributes to your HTML, and the library dynamically generates and injects the required CSS — no manual calculations, no extra build steps.</p>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="home-section home-features">
+            <div class="home-container">
+                <h2 class="home-section-title">Key Features</h2>
+                <div class="home-feature-grid">
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">⚡</div>
+                        <h3 class="home-feature-title">Zero Configuration</h3>
+                        <p class="home-feature-desc">Add <code>class="ef-sprite"</code>, <code>data-ef</code> and <code>data-ef-src</code> attribute – animation runs automatically.</p>
+                    </div>
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">📦</div>
+                        <h3 class="home-feature-title">Lightweight</h3>
+                        <p class="home-feature-desc">~3KB minified, no dependencies. Works in all modern browsers.</p>
+                    </div>
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">🎞️</div>
+                        <h3 class="home-feature-title">Compound Animations</h3>
+                        <p class="home-feature-desc">Use arrays for frames and duration to create multi‑segment sequences with different speeds.</p>
+                    </div>
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">🖼️</div>
+                        <h3 class="home-feature-title">Pixel Art Support</h3>
+                        <p class="home-feature-desc">Add <code>pixel</code> flag to enable <code>image-rendering: pixelated</code> for crisp edges.</p>
+                    </div>
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">🔄</div>
+                        <h3 class="home-feature-title">Flexible Loops</h3>
+                        <p class="home-feature-desc">Choose from <code>loop</code>, <code>pingpong</code> (infinite alternate), or <code>none</code> (play once).</p>
+                    </div>
+                    <div class="home-feature-card">
+                        <div class="home-feature-icon">🌐</div>
+                        <h3 class="home-feature-title">Online Preview</h3>
+                        <p class="home-feature-desc">Use our online tool to preview animation, and adjust your configurations.</p>
+                        <p class="hint">All processing happens locally – your images never leave your browser.</p>
                     </div>
                 </div>
-    
-                <div class="output-label">@keyframes rule (<span id="keyframePreview">spriteAnimate</span>)</div>
-                <div class="code-container">
-                    <textarea readonly class="code-box keyframe" id="keyframesOutput" placeholder="/* Click generate to see keyframes */"></textarea>
-                    <div class="code-actions">
-                        <label class="minify-checkbox">
-                            <input type="checkbox" id="minifyKeyframes"> Minified
-                        </label>
-                        <button class="copy-btn" id="copyKeyframesBtn">Copy code</button>
-                    </div>
-                </div>
+            </div>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="home-section home-quickstart" style="margin-bottom: 60px;">
+            <div class="home-container home-container-narrow">
+                <h2 class="home-section-title">Quick Start</h2>
+                <p class="home-section-text">Include the library via CDN and add a sprite element:</p>
+                <pre><code class="language-html">&lt;!-- Include EasyFrame --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@v1.0.0/dist/easy-frame.umd.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Your sprite element --&gt;
+&lt;div class="ef-sprite"
+     data-ef="size:64x64;frames:6;duration:1;mode:loop"
+     data-ef-src="/images/character.png"&gt;
+&lt;/div&gt;</code></pre>
+                <p class="home-section-text">That's it! The animation will be injected automatically when the page loads.</p>
+                <p class="home-section-text">For more control, explore the <a href="/tool">online tool</a> or read the <a href="/tutorial">tutorial</a>.</p>
+            </div>
+        </div>
+
+        <!-- Example -->
+        <div class="home-section home-example" style="margin-bottom: 60px;">
+            <div class="home-container home-container-narrow">
+                <h2 class="home-section-title">See It in Action</h2>
+                <p class="home-section-text">The dancing character at the top of this page is powered by EasyFrame – just one <code>&lt;div&gt;</code> with <code>data-ef</code> attributes. No custom CSS was written.</p>
             </div>
         </div>
     </div>
@@ -151,8 +126,5 @@
     <footer>
         <p>©2026 by <a href="https://shuninyu.fun" target="_blank">ShuninYu</a></p>
     </footer>
-
-    <!-- 引入脚本 -->
-    <script src="script.js"></script>
 </body>
 </html>

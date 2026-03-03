@@ -6,6 +6,14 @@
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
     <title>About | EasyFrame - Sprite Sheet Animation CSS Generator</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/monokai.min.css">
+    <script src="/highlight.min.js"></script>
+    <script src="/hljs-copycode.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@v1.0.0/dist/easy-frame.umd.min.js"></script>
+    <script>hljs.highlightAll();
+        hljs.addPlugin(new CopyButtonPlugin({
+            autohide: false,
+        }));</script>
 </head>
 <body>
     <div class="topbar">
@@ -16,6 +24,7 @@
         </div>
         <div class="navbar">
             <a href="/">home</a>
+            <a href="/tool">tool</a>
             <a href="/tutorial">tutorial</a>
             <a href="">about</a>
             <a href="/privacy">privacy</a>
@@ -24,41 +33,33 @@
     </div>
 
     <div class="normalbox">
-        <h1>About</h1>
-        <h2>About EasyFrame</h2>
-        <p>EasyFrame is a lightweight online JavaScript tool for quickly generating CSS Sprite Sheet Animation code.</p>
-        <p>Whether you're a front-end developer, game creator, or animation enthusiast, just fill in a few parameters and EasyFrame will automatically produce standard @keyframes and corresponding class rules – saving you the hassle of manually calculating background positions and keyframe percentages.</p>
+        <h1>About EasyFrame</h1>
+        <p>EasyFrame is a lightweight JavaScript library that brings sprite sheet animations to your web projects with zero manual CSS coding. Simply include the library, add a few data attributes to your HTML elements, and EasyFrame automatically generates and injects the required <b>@keyframes</b> and class rules.</p>
+
+        <h2>How It Works</h2>
+        <p>After loading <b>easyframe.js</b>, any element with the class <b>ef-sprite</b> and a <b>data-ef</b> attribute will be animated. The <b>data-ef</b> attribute defines the sprite size, frame count, duration, and animation mode. Optionally, use <b>data-ef-src</b> to set the background image.</p>
+        <pre><code class="html">&lt;div class="ef-sprite" data-ef="size:64x64;frames:6;duration:1;mode:loop" data-ef-src="/images/character.png"&gt;&lt;/div&gt;</code></pre>
+        <p>No need to write a single line of CSS – the library handles everything, even complex multi‑segment animations.</p>
+
         <h2>Key Features</h2>
         <ul>
-            <li>
-                <p>Flexible parameter configuration – Customize animation name, class name, sprite dimensions, frames, duration, and cycle mode.</p>
-            </li>
-            <li>
-                <p>Compound animation support – Frames and duration can be set as arrays, easily creating multi‑segment animations with variable speeds (e.g., 10 frames / 0.7s for running + 3 frame / 0.3s for jumping).</p>
-            </li>
-            <li>
-                <p>Live preview – Upload a local sprite sheet or enter an image URL to instantly preview the animation (infinite loop, with optional ping-pong alternate).</p>
-            </li>
-            <li>
-                <p>Pixel art friendly – Check the "Pixelated" option to automatically apply <code>image-rendering: pixelated</code>, keeping pixel art crisp.</p>
-            </li>
-            <li>
-                <p>One-click copy – Generated CSS is split into class rule and keyframes rule, each with its own copy button for easy integration into your project.</p>
-            </li>
-            <li>
-                <p>Server-less, privacy first – All processing happens locally in your browser; no images or data are ever uploaded.</p>
-            </li>
+            <li><p><strong>Zero‑configuration</strong> – Just add data attributes and the animation runs.</p></li>
+            <li><p><strong>Lightweight & dependency‑free</strong> – Pure JavaScript, no external libraries.</p></li>
+            <li><p><strong>Automatic style injection</strong> – Animations are added to the page on the fly.</p></li>
+            <li><p><strong>Compound animations</strong> – Use arrays for <b>frames</b> and <b>duration</b> to create multi‑speed sequences (e.g., running + jumping).</p></li>
+            <li><p><strong>Pixel art support</strong> – Enable <b>image-rendering: pixelated</b> with the <b>pixel</b> flag.</p></li>
+            <li><p><strong>Flexible loop modes</strong> – Choose <b>loop</b>, <b>pingpong</b> (infinite alternate), or <b>none</b> (play once).</p></li>
+            <li><p><strong>Server‑side free</strong> – All processing happens in the browser; your images stay local.</p></li>
         </ul>
+
         <h2>Use Cases</h2>
         <ul>
-            <li>
-                <p>Add frame animations to your website without uploading large video files.</p>
-            </li>
-            <li>
-                <p>Demonstrate animations in design mockups.</p>
-            </li>
+            <li><p>Add frame animations to your website without uploading large video files.</p></li>
+            <li><p>Interactive UI elements that need simple frame‑based motion.</p></li>
+            <li><p>Demonstrate animations in design mockups.</p></li>
         </ul>
-        <p style="font-family: 'Tilt Warp' , sans-serif;">EasyFrame is created with the goal to help developers create sprite animations more easily, avoiding tedious coding.<br>Its @keyframe animation generation logic is borrowed from <a href="https://animecursor.js.org">AnimeCursor</a>, another project of mine.<br>While the tool was originally crafted for my personal use, I realized its potential to assist fellow developers — then here comes EasyFrame.</p>
+
+        <p style="font-family: 'Tilt Warp' , sans-serif;">EasyFrame was born from the <a href="https://animecursor.js.org">AnimeCursor</a> project. What started as a personal tool for generating CSS quickly evolved into a full‑fledged library to help developers skip the tedious part of sprite animation. No more manual keyframe percentages – just describe your sprite and let EasyFrame do the rest.</p>
     </div>
 
     <footer>

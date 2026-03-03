@@ -133,6 +133,11 @@
             return min;
         }
 
+        // ---------- HTML 压缩函数（用于将多行 HTML 压缩为一行）----------
+        function minifyHTML(html) {
+            return html.replace(/\s+/g, ' ').replace(/> </g, '><').trim();
+        }
+
         // ---------- 获取 DOM 元素并检查 ----------
         function getElement(id) {
             const el = document.getElementById(id);
@@ -154,8 +159,10 @@
         const generateBtn = getElement('generateBtn');
         const classOutput = getElement('classOutput');
         const keyframesOutput = getElement('keyframesOutput');
+        const htmlOutput = getElement('htmlOutput');                 // 新增
         const classPreview = getElement('classPreview');
         const keyframePreview = getElement('keyframePreview');
+        const htmlPreview = getElement('htmlPreview');               // 新增（静态，可不使用）
 
         const switchCode = getElement('switchCode');
         const codeBox = getElement('codeBox');
@@ -189,10 +196,12 @@
         // 复制按钮
         const copyClassBtn = getElement('copyClassBtn');
         const copyKeyframesBtn = getElement('copyKeyframesBtn');
+        const copyHtmlBtn = getElement('copyHtmlBtn');               // 新增
 
         // Minified 复选框
         const minifyClassCheckbox = getElement('minifyClass');
         const minifyKeyframesCheckbox = getElement('minifyKeyframes');
+        const minifyHtmlCheckbox = getElement('minifyHtml');         // 新增
 
         // 如果关键元素缺失，终止执行
         if (!animNameInput || !classNameInput || !generateBtn) {
@@ -200,9 +209,10 @@
             return;
         }
 
-        // 存储原始 CSS（未压缩）
+        // 存储原始 CSS 及 HTML（未压缩）
         let originalClassCSS = '';
         let originalKeyframesCSS = '';
+        let originalHtmlCode = '';                                    // 新增
 
         // 状态变量
         let localImageBlobUrl = null;
@@ -218,6 +228,7 @@
         function updatePreviews() {
             if (classPreview) classPreview.innerText = '.' + (classNameInput.value || 'class-name');
             if (keyframePreview) keyframePreview.innerText = animNameInput.value || 'animation-name';
+            // htmlPreview 内容固定为 div.ef-sprite，无需更新
         }
         animNameInput.addEventListener('input', updatePreviews);
         classNameInput.addEventListener('input', updatePreviews);
@@ -411,6 +422,53 @@
             }
         }
 
+        function updateHtmlOutput() {
+            if (!htmlOutput) return;
+            if (minifyHtmlCheckbox && minifyHtmlCheckbox.checked) {
+                htmlOutput.value = minifyHTML(originalHtmlCode);
+            } else {
+                htmlOutput.value = originalHtmlCode;
+            }
+        }
+
+        // ---------- 生成 HTML 元素的辅助函数 ----------
+        function buildHtmlCode(width, height, frames, duration, cycleMode, pixelated, imageUrl) {
+            // 构建 data-ef 字符串
+            const parts = [];
+            parts.push(`size:${width}x${height}`);
+            
+            if (Array.isArray(frames)) {
+                parts.push(`frames:${frames.join(',')}`);
+            } else {
+                parts.push(`frames:${frames}`);
+            }
+            
+            if (Array.isArray(duration)) {
+                parts.push(`duration:${duration.join(',')}`);
+            } else {
+                parts.push(`duration:${duration}`);
+            }
+            
+            parts.push(`mode:${cycleMode}`);
+            
+            if (pixelated) {
+                parts.push('pixel');
+            }
+            
+            const dataEf = parts.join(';');
+            const trimmedUrl = imageUrl.trim();
+
+            // 多行格式（未压缩）
+            let html = '<div\n    class="ef-sprite"';
+            html += `\n    data-ef="${dataEf}"`;
+            if (trimmedUrl) {
+                html += `\n    data-ef-src="${trimmedUrl}"`;
+            }
+            html += '\n></div>';
+            
+            return html;
+        }
+
         // ---------- 生成按钮 ----------
         if (generateBtn) {
             generateBtn.addEventListener('click', () => {
@@ -505,9 +563,13 @@
                     originalClassCSS = classRule;
                     originalKeyframesCSS = keyframesRule;
 
+                    // 生成 HTML 元素代码
+                    originalHtmlCode = buildHtmlCode(width, height, frames, duration, cycleMode, pixelated, imageUrl);
+
                     // 根据复选框状态更新显示
                     updateClassOutput();
                     updateKeyframesOutput();
+                    updateHtmlOutput();
 
                     updatePreviewAnimation();
 
@@ -531,6 +593,9 @@
         }
         if (minifyKeyframesCheckbox) {
             minifyKeyframesCheckbox.addEventListener('change', updateKeyframesOutput);
+        }
+        if (minifyHtmlCheckbox) {
+            minifyHtmlCheckbox.addEventListener('change', updateHtmlOutput);
         }
 
         // ---------- 开关代码显示 ----------
@@ -570,6 +635,7 @@
 
         setupCopyButton(copyClassBtn, classOutput);
         setupCopyButton(copyKeyframesBtn, keyframesOutput);
+        setupCopyButton(copyHtmlBtn, htmlOutput);   // 新增
 
         window.generateAnimeCursorCSS = generateAnimeCursorCSS;
     }
