@@ -1,0 +1,36 @@
+{
+    "name": "easy-frame",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Zero-JS sprite sheet animation generator",
+    "main": "dist/easyframe.umd.js",
+    "module": "dist/easyframe.esm.js",
+    "unpkg": "dist/easyframe.min.js",
+    "jsdelivr": "dist/easyframe.min.js",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "rollup -c"
+    },
+    "keywords": [
+        "sprite",
+        "animation",
+        "css",
+        "sprite-sheet"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ShuninYu/easy-frame.git"
+    },
+    "author": "ShuninYu",
+    "license": "MIT",
+    "homepage": "https://easyframe.js.org",
+    "bugs": {
+        "url": "https://github.com/ShuninYu/easy-frame/issues"
+    },
+    "devDependencies": {
+        "rollup": "^4.56.0",
+        "@rollup/plugin-terser": "^0.4.3"
+    }
+}
