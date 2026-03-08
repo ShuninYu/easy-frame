@@ -2,10 +2,6 @@
 
 ![EasyFrame](https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@main/favicon.png)
 
-**EasyFrame** is a tool that helps you create sprite sheet animation CSS code.
-
-## [Official Website](https://easyframe.js.org)
-
 > **Lightweight · Zero-config · Zero-JS usage · Just drop and animate**
 
 ---
@@ -20,6 +16,8 @@ EasyFrame is a minimal runtime JavaScript library that automatically generates C
 No manual CSS writing.
 No manual JavaScript initialization.
 Just add a class and configuration — and it works.
+
+## [Official Website](https://easyframe.js.org)
 
 ---
 
