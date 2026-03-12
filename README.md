@@ -40,7 +40,7 @@ Just add a class and configuration — and it works.
 ### CDN (Recommended)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@v1.1.0/dist/easy-frame.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@v1.1.1/dist/easy-frame.umd.min.js"></script>
 ```
 
 or
@@ -206,6 +206,41 @@ data-ef-src="/path/to/sprite.png"
 ```
 
 If omitted, background image must be defined in CSS.
+
+
+---
+
+## 🎨 Styling the Child Element
+
+EasyFrame automatically adds a fixed class name `ef-child` to every generated child element that holds the animation. This allows you to target and style the animated element reliably, regardless of the dynamic UID suffix.
+
+### Global styling
+
+To apply styles to all EasyFrame animations, simply use the `.ef-child` selector:
+
+```css
+.ef-child {
+  filter: drop-shadow(0 0 4px gold);
+  border-radius: 8px;
+}
+```
+
+### Per‑instance styling
+
+If you need to style only a specific animation, add your own class to the parent `.ef-sprite` element, then use a descendant selector:
+
+```html
+<div class="ef-sprite my-walk-cycle" data-ef="size:64x64;frames:8;duration:1" data-ef-src="walk.png"></div>
+
+<style>
+  .my-walk-cycle .ef-child {
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+    transform: scale(1.1);
+  }
+</style>
+```
+
+> **Important:** Do not rely on the dynamically generated class names like `ef_child_2` – they change when the page structure is modified. Always use the fixed `.ef-child` class or a parent‑based selector.
 
 ---
 

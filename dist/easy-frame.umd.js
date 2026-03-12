@@ -23,10 +23,11 @@
         typeof global !== "undefined" ? global : window,
         function () {
 
-            const VERSION = "1.0.0";
+            const VERSION = "1.1.1";                     // 更新版本号
             const STYLE_ID = "easyframe-runtime-style";
             const CLASS_SELECTOR = ".ef-sprite";
             const CHILD_CLASS_PREFIX = "ef_child_";
+            const COMMON_CHILD_CLASS = "ef-child";        // 新增通用类名
 
             let uid = 0;
 
@@ -93,17 +94,17 @@
                     el.classList.add(containerClass);
                     el.dataset.efProcessed = "true";
 
-                    // 创建子元素
+                    // 创建子元素，并添加上通用类
                     const child = document.createElement("div");
-                    child.className = childClass;
+                    child.className = `${childClass} ${COMMON_CHILD_CLASS}`;   // 同时拥有动态类和通用类
                     el.appendChild(child);
 
                     // 生成 CSS
                     const css = generateCSS({
                         animationName,
                         containerClass,
-                        childClass,
-                        size: config.size,                // 原始帧尺寸 [w, h]
+                        childClass,       // 注意：CSS 生成中仍使用动态类名进行样式定义，通用类仅用于用户选择
+                        size: config.size,
                         frames: config.frames,
                         duration: config.duration,
                         imageUrl,
@@ -175,7 +176,6 @@
                 const defaultWidth = defaultW + "px";
                 const defaultHeight = defaultH + "px";
 
-                // 未设置 data-ef-box，使用默认值
                 if (!str) {
                     return {
                         width: defaultWidth,
@@ -189,11 +189,9 @@
                 let height = parts[1] || defaultHeight;
                 let fit = parts[2] || "none";
 
-                // 为纯数字添加 px
                 width = /^\d+$/.test(width) ? width + "px" : width;
                 height = /^\d+$/.test(height) ? height + "px" : height;
 
-                // 验证 fit 值
                 if (!["none", "contain", "cover"].includes(fit)) {
                     console.warn(`[EasyFrame] Invalid fit value "${fit}", using "none".`);
                     fit = "none";
@@ -220,7 +218,7 @@
                 cycleMode,
                 pixelated
             }) {
-                const [frameWidth, frameHeight] = size; // 用于 aspect-ratio
+                const [frameWidth, frameHeight] = size;
 
                 const framesArray = Array.isArray(frames) ? frames : [frames];
                 const durationArray = Array.isArray(duration) ? duration : [duration];
@@ -261,7 +259,6 @@
                 containerRule += `position:relative;`;
                 containerRule += `width:${parentWidth};`;
                 containerRule += `height:${parentHeight};`;
-                // cover 模式需要隐藏溢出
                 if (fit === "cover") {
                     containerRule += `overflow:hidden;`;
                 }
@@ -275,7 +272,6 @@
                 if (imageUrl) {
                     childRule += `background-image:url("${imageUrl}");`;
                 }
-                // 背景图尺寸：总帧数 * 100% 宽度
                 childRule += `background-size:${totalFrames * 100}% auto;`;
                 childRule += `aspect-ratio:${frameWidth} / ${frameHeight};`;
 
@@ -285,7 +281,6 @@
 
                 // ---------- 定位规则 (根据 fit) ----------
                 if (fit === "none") {
-                    // 固定原始尺寸，左上角对齐
                     childRule += `
                     top:0;
                     left:0;
@@ -314,11 +309,10 @@
 
                 childRule += `}`;
 
-                // ---------- 动画 (仅当有动画且总帧数>1) ----------
+                // ---------- 动画 ----------
                 if (cycleMode !== "none" && totalFrames > 1) {
                     let animationValue = `${animationName} ${totalDuration}s`;
 
-                    // 单一段且总帧数>1时添加 steps
                     if (!Array.isArray(frames) && totalFrames > 1) {
                         animationValue += ` steps(${totalFrames})`;
                     }
@@ -329,7 +323,6 @@
                         animationValue += " infinite alternate";
                     }
 
-                    // 将动画插入到子元素样式中（替换最后的 }）
                     childRule = childRule.slice(0, -1) + `animation:${animationValue};}`;
                 }
 
@@ -352,11 +345,9 @@
             }
 
             function clearStyleAndChildren() {
-                // 移除样式
                 const oldStyle = document.getElementById(STYLE_ID);
                 if (oldStyle) oldStyle.remove();
 
-                // 移除所有内部生成的子元素，并清除处理标记
                 document.querySelectorAll(CLASS_SELECTOR).forEach(el => {
                     const children = el.querySelectorAll(`[class^="${CHILD_CLASS_PREFIX}"]`);
                     children.forEach(child => child.remove());
