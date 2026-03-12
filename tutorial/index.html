@@ -70,14 +70,14 @@
     data-ef="size:64x64;frames:6;duration:1"
     data-ef-src="/images/character.png">
 &lt;/div></code></pre>
-                                <p>That’s it.</p>
+                                <p>That’s it. EasyFrame automatically creates a child element inside <code>.ef-sprite</code> to host the animation. The parent element’s size will default to the <code>size</code> value (in pixels).</p>
                                 <p>When the page loads, EasyFrame:</p>
                                 <ol>
                                     <li><p>Scans all <b>.ef-sprite</b> elements</p></li>
                                     <li><p>Parses the <b>data-ef</b> configuration</p></li>
-                                    <li><p>Generates CSS classes</p></li>
-                                    <li><p>Injects <b>@keyframes</b> into <b>&lt;head></b></p></li>
-                                    <li><p>Automatically applies animation</p></li>
+                                    <li><p>Generates CSS classes and <b>@keyframes</b></p></li>
+                                    <li><p>Injects styles into <b>&lt;head></b></p></li>
+                                    <li><p>Creates a child element and applies the animation</p></li>
                                 </ol>
                             </li>
                             <li>
@@ -100,7 +100,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td>size</td>
-                                                    <td>Frame size (width x height)</td>
+                                                    <td>Frame size (width x height) – used for aspect ratio and background positioning</td>
                                                     <td><b>size:64x64</b></td>
                                                 </tr>
                                                 <tr>
@@ -191,6 +191,44 @@
                                 </ul>
                             </li>
                             <li>
+                                <p><b>Container Sizing and Fit (new in v1.1.0)</b></p>
+                                <p>Use <code>data-ef-box</code> to control the dimensions of the parent container and how the sprite fills it.</p>
+                                <p>Format:</p>
+                                <pre><code class="js">data-ef-box="&lt;width&gt; &lt;height&gt; [fit]"</code></pre>
+                                <ul>
+                                    <li><b>width / height</b>: any valid CSS length (e.g., <code>50vw</code>, <code>300px</code>, <code>100%</code>). If a plain number is given, <code>px</code> is added automatically.</li>
+                                    <li><b>fit</b> (optional, default <code>none</code>): defines how the sprite adapts:
+                                        <ul>
+                                            <li><code>none</code> – Child element keeps the original frame size (from <code>size</code>) and sits at the top-left corner of the parent.</li>
+                                            <li><code>contain</code> – Sprite scales to fit entirely inside the parent (letterboxing).</li>
+                                            <li><code>cover</code> – Sprite scales to cover the parent (may be cropped).</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <p><b>Examples:</b></p>
+                                <pre><code class="html">&lt;!-- Parent size 50vw x 300px, cover mode -->
+&lt;div class="ef-sprite"
+     data-ef="size:100x200;frames:8;duration:1"
+     data-ef-src="sprite.png"
+     data-ef-box="50vw 300px cover">
+&lt;/div>
+
+&lt;!-- Parent size 200px x 150px, contain mode -->
+&lt;div class="ef-sprite"
+     data-ef="size:64x64;frames:6;duration:1"
+     data-ef-src="walk.png"
+     data-ef-box="200px 150px contain">
+&lt;/div>
+
+&lt;!-- Parent size defaults to frame size (64x64 px), fit=none (original size, top-left) -->
+&lt;div class="ef-sprite"
+     data-ef="size:64x64;frames:6;duration:1"
+     data-ef-src="walk.png">
+&lt;/div></code></pre>
+                                <p>If <code>data-ef-box</code> is omitted, the parent container’s dimensions are taken from the <code>size</code> value (in pixels), and <code>fit</code> is <code>none</code>. This ensures backward compatibility with previous versions.</p>
+                                <p><b>Note:</b> The sprite’s aspect ratio is always preserved according to the <code>size</code> in <code>data-ef</code>.</p>
+                            </li>
+                            <li>
                                 <p><b>API</b></p>
                                 <table>
                                     <thead>
@@ -206,7 +244,7 @@
                                         </tr>
                                         <tr>
                                             <td><b>EasyFrame.refresh()</b></td>
-                                            <td>Re-scan DOM</td>
+                                            <td>Re-scan DOM (clears old child elements and styles)</td>
                                         </tr>
                                         <tr>
                                             <td><b>EasyFrame.version</b></td>
