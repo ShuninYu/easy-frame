@@ -13,8 +13,8 @@
 
 EasyFrame is a minimal runtime JavaScript library that automatically generates CSS sprite sheet animations directly from HTML data attributes.
 
-No manual CSS writing.
-No manual JavaScript initialization.
+No manual CSS writing.  
+No manual JavaScript initialization.  
 Just add a class and configuration — and it works.
 
 ## [Official Website](https://easyframe.js.org)
@@ -29,6 +29,7 @@ Just add a class and configuration — and it works.
 * Supports segmented animations
 * Supports loop / ping-pong / single play
 * Optional pixelated rendering
+* **Responsive container** with `data-ef-box` (contain/cover modes)
 * Works via CDN, local file, or npm
 * UMD + ESM build
 
@@ -39,7 +40,7 @@ Just add a class and configuration — and it works.
 ### CDN (Recommended)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@v1.0.0/dist/easy-frame.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ShuninYu/easy-frame@v1.1.0/dist/easy-frame.umd.min.js"></script>
 ```
 
 or
@@ -82,15 +83,7 @@ const EasyFrame = require("easyframe");
 </div>
 ```
 
-That’s it.
-
-When the page loads, EasyFrame:
-
-1. Scans all `.ef-sprite` elements
-2. Parses the `data-ef` configuration
-3. Generates CSS classes
-4. Injects `@keyframes` into `<head>`
-5. Automatically applies animation
+That’s it. EasyFrame automatically creates a child element inside `.ef-sprite` to host the animation. The parent element’s size defaults to the `size` value (in pixels).
 
 ---
 
@@ -106,11 +99,11 @@ data-ef="key:value;key:value;flag"
 
 ### Required Parameters
 
-| Key      | Description                 | Example                                |
-| -------- | --------------------------- | -------------------------------------- |
-| size     | Frame size (width x height) | `size:64x64`                           |
-| frames   | Number or segments          | `frames:6` or `frames:4,3,7`           |
-| duration | Duration in seconds         | `duration:1` or `duration:0.4,0.2,0.6` |
+| Key      | Description                                            | Example                                |
+| -------- | ------------------------------------------------------ | -------------------------------------- |
+| size     | Frame size (width x height) – used for aspect ratio    | `size:64x64`                           |
+| frames   | Number or segments                                     | `frames:6` or `frames:4,3,7`           |
+| duration | Duration in seconds                                    | `duration:1` or `duration:0.4,0.2,0.6` |
 
 ---
 
@@ -136,6 +129,52 @@ Example:
 ```html
 data-ef="size:64x64;frames:4;duration:1;mode:pingpong"
 ```
+
+---
+
+## 📦 Container Sizing and Fit
+
+Use `data-ef-box` to control the dimensions of the parent container and how the sprite fills it.
+
+Format:
+
+```
+data-ef-box="<width> <height> [fit]"
+```
+
+- **width / height**: any valid CSS length (e.g., `50vw`, `300px`, `100%`). Plain numbers are automatically treated as pixels.
+- **fit** (optional, default `none`):
+  - `none` – Child element keeps the original frame size (from `size`) and sits at the top-left corner.
+  - `contain` – Sprite scales to fit entirely inside the parent (letterboxing).
+  - `cover` – Sprite scales to cover the parent (may be cropped).
+
+**Examples:**
+
+```html
+<!-- Parent size 50vw x 300px, cover mode -->
+<div class="ef-sprite"
+     data-ef="size:100x200;frames:8;duration:1"
+     data-ef-src="sprite.png"
+     data-ef-box="50vw 300px cover">
+</div>
+
+<!-- Parent size 200px x 150px, contain mode -->
+<div class="ef-sprite"
+     data-ef="size:64x64;frames:6;duration:1"
+     data-ef-src="walk.png"
+     data-ef-box="200px 150px contain">
+</div>
+
+<!-- Parent size defaults to frame size (64x64 px), fit=none -->
+<div class="ef-sprite"
+     data-ef="size:64x64;frames:6;duration:1"
+     data-ef-src="walk.png">
+</div>
+```
+
+If `data-ef-box` is omitted, the parent container’s dimensions are taken from the `size` value (in pixels), and `fit` is `none`. This ensures backward compatibility with previous versions.
+
+> **Note:** The sprite’s aspect ratio is always preserved according to the `size` in `data-ef`.
 
 ---
 
@@ -175,18 +214,18 @@ If omitted, background image must be defined in CSS.
 If elements are added dynamically:
 
 ```js
-EasyFrame.refresh();
+EasyFrame.refresh();   // Clears old child elements and regenerates styles
 ```
 
 ---
 
 ## 📦 API
 
-| Method                | Description         |
-| --------------------- | ------------------- |
-| `EasyFrame.init()`    | Manually initialize |
-| `EasyFrame.refresh()` | Re-scan DOM         |
-| `EasyFrame.version`   | Library version     |
+| Method                | Description                    |
+| --------------------- | ------------------------------ |
+| `EasyFrame.init()`    | Manually initialize            |
+| `EasyFrame.refresh()` | Re-scan DOM (clean & rebuild)  |
+| `EasyFrame.version`   | Library version                |
 
 ---
 
@@ -198,6 +237,7 @@ Works in all modern browsers that support:
 * `classList`
 * `dataset`
 * CSS animations
+* `aspect-ratio` (modern browsers; fallback included for none)
 
 No dependencies required.
 
@@ -225,5 +265,5 @@ Advanced features (multi-row sprites, viewport detection, etc.) may be added in 
 
 ## 📄 License
 
-MIT License
+MIT License  
 © 2026 ShuninYu
