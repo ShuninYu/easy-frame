@@ -229,6 +229,26 @@
                                 <p><b>Note:</b> The sprite’s aspect ratio is always preserved according to the <code>size</code> in <code>data-ef</code>.</p>
                             </li>
                             <li>
+                                <p><b>Styling the Child Element</b></p>
+                                <p>EasyFrame automatically adds a fixed class <code>ef-child</code> to the internal element that holds the animation. This makes it easy to apply custom CSS without worrying about changing UIDs.</p>
+                                <p><b>Global styling</b></p>
+                                <pre><code class="css">.ef-child {
+    filter: drop-shadow(0 0 4px gold);
+    border-radius: 8px;
+}</code></pre>
+                                <p><b>Per‑instance styling</b></p>
+                                <p>Add your own class to the parent <code>.ef-sprite</code> and use a descendant selector:</p>
+                                <pre><code class="html">&lt;div class="ef-sprite my-walk-cycle" data-ef="size:64x64;frames:8;duration:1" data-ef-src="walk.png"&gt;&lt;/div&gt;
+
+&lt;style&gt;
+.my-walk-cycle .ef-child {
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+    transform: scale(1.1);
+}
+&lt;/style&gt;</code></pre>
+                                <p><b>Important:</b> Never rely on the auto‑generated class names like <code>ef_child_2</code> – they change when new elements are added. Always use <code>.ef-child</code> or a parent‑based selector.</p>
+                            </li>
+                            <li>
                                 <p><b>API</b></p>
                                 <table>
                                     <thead>
